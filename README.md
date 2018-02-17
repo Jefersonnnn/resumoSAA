@@ -1,5 +1,5 @@
 # resumoSSA
-
+https://www.devmedia.com.br/apache-poi-manipulando-documentos-em-java/31778
 Sub Calculo_VD()
 '
 ' Calculo_VD Macro
