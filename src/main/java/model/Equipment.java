@@ -3,7 +3,7 @@ package model;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class Equipamento {
+public class Equipment {
 
     private String       instalacao;
     private String       dipositivo;
@@ -11,9 +11,9 @@ public class Equipamento {
     private List<Double> medida;
     private List<LocalDateTime>   data;
 
-    public Equipamento() {}
+    public Equipment() {}
 
-    public Equipamento(String instalacao, String dipositivo, String periodo, List<Double> medida, List<LocalDateTime> data) {
+    public Equipment(String instalacao, String dipositivo, String periodo, List<Double> medida, List<LocalDateTime> data) {
         this.instalacao = instalacao;
         this.dipositivo = dipositivo;
         this.periodo = periodo;

@@ -1,9 +1,8 @@
 package utils;
 
-import model.Equipamento;
+import model.Equipment;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 
 import java.io.File;
@@ -19,24 +18,24 @@ import java.util.List;
 public class AbreExcel implements Runnable {
 
     private File file;
-    private Equipamento equipamento;
+    private onExcelRead mListener;
 
-    public AbreExcel(File file) {
+    public AbreExcel(File file, onExcelRead listener) {
         this.file = file;
-        this.equipamento = new Equipamento();
+        this.mListener = listener;
     }
 
     /**
      * Abre o arquivo especificado em uma Thread
      *
      * @param file
-     * @return Equipamento
+     * @return Equipment
      */
-    public void openFile(File file) {
-
-        List<LocalDateTime> datas = new ArrayList<LocalDateTime>();
-        List<Double> medidas = new ArrayList<Double>();
-        Equipamento equipamento = new Equipamento();
+    @Override
+    public void run() {
+        List<LocalDateTime> datas = new ArrayList<>();
+        List<Double> medidas = new ArrayList<>();
+        Equipment equipment = new Equipment();
 
         try {
             FileInputStream arquivo = new FileInputStream(file);
@@ -48,7 +47,6 @@ public class AbreExcel implements Runnable {
 
             while (rowIterator.hasNext()) {
                 Row row = rowIterator.next();
-                Iterator<Cell> cellIterator = row.cellIterator();
 
                 //Pega as 4 primeiras linhas do arquivo excel
                 //0 Descartado
@@ -57,13 +55,13 @@ public class AbreExcel implements Runnable {
                 //3 Periodo da instalação
                 switch (row.getRowNum()) {
                     case 1:
-                        equipamento.setInstalacao(row.getCell(1).getStringCellValue());
+                        equipment.setInstalacao(row.getCell(1).getStringCellValue());
                         break;
                     case 2:
-                        equipamento.setDipositivo(row.getCell(1).getStringCellValue());
+                        equipment.setDipositivo(row.getCell(1).getStringCellValue());
                         break;
                     case 3:
-                        equipamento.setPeriodo(row.getCell(1).getStringCellValue());
+                        equipment.setPeriodo(row.getCell(1).getStringCellValue());
                         break;
                 }
 
@@ -76,8 +74,8 @@ public class AbreExcel implements Runnable {
                 }
             }
 
-            equipamento.setData(datas);
-            equipamento.setMedida(medidas);
+            equipment.setData(datas);
+            equipment.setMedida(medidas);
 
             arquivo.close();
         } catch (FileNotFoundException e) {
@@ -88,17 +86,11 @@ public class AbreExcel implements Runnable {
         }
 
         System.out.println("FINISH " + this.toString());
-        this.equipamento = equipamento;
+        mListener.onFinish(equipment);
     }
 
-    @Override
-    public void run() {
-        openFile(this.file);
+    public interface onExcelRead {
+        void onFinish(Equipment equipment);
     }
-
-    public Equipamento getEquipamento() {
-        return this.equipamento;
-    }
-
 
 }

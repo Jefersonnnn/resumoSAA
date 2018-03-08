@@ -1,4 +1,4 @@
-import analises.AnaliseFP;
+import analises.AnalyzeSF;
 import utils.AbreExcel;
 
 import java.io.File;
@@ -14,7 +14,7 @@ public class Main {
             System.out.println("Formato de Impressão [V][H]:");
             formatoImp = scanner.next();
 
-        }while (!formatoImp.toUpperCase().equals("V") && !formatoImp.toUpperCase().equals("H"));
+        } while (!formatoImp.toUpperCase().equals("V") && !formatoImp.toUpperCase().equals("H"));
 
         //Diretorio contendo os arquivos .xls para serem analisados
         File pasta = new File("in");
@@ -36,21 +36,11 @@ public class Main {
                 Thread[] threads = new Thread[arquivos.length];
 
                 for (int i = 0; i < arquivos.length; i++) {
-                    abrirArquivos[i] = new AbreExcel(arquivos[i]);
+                    final String tmp = formatoImp;
+                    abrirArquivos[i] = new AbreExcel(arquivos[i], equipment -> AnalyzeSF.minimaNot(equipment, tmp));
                     threads[i] = new Thread(abrirArquivos[i]);
                     threads[i].start();
-                    try {
-                        threads[i].join();
-                    } catch (InterruptedException e) {
-                        System.err.println("Erro na threads " + threads[i].getName() + "\n");
-                        e.printStackTrace();
-                    }
                 }
-
-                for (AbreExcel arquivo : abrirArquivos) {
-                    AnaliseFP.minimaNot(arquivo.getEquipamento(), formatoImp);
-                }
-
             }
         } else {
             System.err.println("ERROR: Pasta '/in' não foi criada");
