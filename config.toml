@@ -1,0 +1,28 @@
+################################################################################
+## This is a TOML
+
+# Speak your mind with the hash symbol. They go from the symbol to the end of
+# the line.
+
+
+################################################################################
+
+title = "Lista de Equipamentos telelog Aguas de Joinville"
+
+[Equipments]
+
+[Equipments.0]
+ name = "Curt Alvino Monich"
+ installation = 126
+ device = 253
+ [Equipments.0.points]
+  pressao = 254
+  vazao = 262
+
+[Equipments.1]
+ name = "Almirante Jaceguay"
+ installation = 0
+ device = 0
+ [Equipments.1.points]
+  pressao = 0
+  vazao = 262
