@@ -5,8 +5,10 @@ import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import model.EquipmentValueTelelog;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
 
@@ -18,9 +20,18 @@ public class Core {
     public static void loadInitialConfiguration() {
         Gson gson = new Gson();
         try {
-            JsonReader reader = new JsonReader(new FileReader("config.json"));
-            List<EquipmentValueTelelog> telelogList = gson.fromJson(reader, EQUIPMENT_TYPE);
-            System.out.println("");
+            File configJson = new File("config.json");
+            if (configJson.exists()) {
+                JsonReader reader = new JsonReader(new FileReader("config.json"));
+                List<EquipmentValueTelelog> telelogList = gson.fromJson(reader, EQUIPMENT_TYPE);
+                System.out.println("");
+            } else {
+                try {
+                    configJson.createNewFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
