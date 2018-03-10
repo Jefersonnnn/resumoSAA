@@ -1,4 +1,4 @@
-package analises;
+package analysis;
 
 public interface Analise {
 }

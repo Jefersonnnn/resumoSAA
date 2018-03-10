@@ -5,6 +5,7 @@ import java.util.List;
 
 public class Equipment {
 
+    private String fileName;
     private String       instalacao;
     private String       dipositivo;
     private String       periodo;
@@ -19,6 +20,14 @@ public class Equipment {
         this.periodo = periodo;
         this.medida = medida;
         this.data = data;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
     public String getInstalacao() {

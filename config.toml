@@ -1,0 +1,21 @@
+["Almirante Jaceguay"]
+name = "Almirante Jaceguay"
+
+["Almirante Jaceguay".values]
+installation = 545
+device = 545
+
+["Almirante Jaceguay".points]
+vazao = 545
+pressao = 545
+
+["Curt Alvino"]
+name = "Curt Alvino"
+
+["Curt Alvino".values]
+installation = 545
+device = 545
+
+["Curt Alvino".points]
+vazao = 545
+pressao = 545

@@ -39,7 +39,7 @@ public class AbreExcel implements Runnable {
 
         try {
             FileInputStream arquivo = new FileInputStream(file);
-
+            equipment.setFileName(file.getName());
             HSSFWorkbook workbook = new HSSFWorkbook(arquivo);
             HSSFSheet sheetEquipamento = workbook.getSheetAt(0);
 

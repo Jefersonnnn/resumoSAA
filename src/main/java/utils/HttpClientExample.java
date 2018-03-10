@@ -1,9 +1,7 @@
 package utils;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import org.apache.http.Consts;
 import org.apache.http.HttpEntity;
@@ -21,6 +19,9 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.jsoup.Connection;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 
 /**
@@ -38,37 +39,6 @@ public class HttpClientExample {
 
         System.out.println("\nTesting 2 - Send Http POST request");
         http.sendPost();
-
-    }
-
-    // HTTP GET request
-    private void sendGet() throws Exception {
-
-        String url = "http://www.google.com/search?q=developer";
-
-        HttpClient client = new DefaultHttpClient();
-        HttpGet request = new HttpGet(url);
-
-        // add request header
-        request.addHeader("User-Agent", USER_AGENT);
-
-        HttpResponse response = client.execute(request);
-
-        System.out.println("\nSending 'GET' request to URL : " + url);
-        System.out.println("Response Code : " +
-                response.getStatusLine().getStatusCode());
-
-        BufferedReader rd = new BufferedReader(
-                new InputStreamReader(response.getEntity().getContent()));
-
-        StringBuffer result = new StringBuffer();
-        String line = "";
-        while ((line = rd.readLine()) != null) {
-            result.append(line);
-        }
-
-        System.out.println(result.toString());
-
     }
 
     // HTTP POST request
@@ -79,11 +49,36 @@ public class HttpClientExample {
         HttpClient httpClient = HttpClients.createDefault();
         HttpPost post = new HttpPost(url);
 
+        // Formulario enviado ao servidor www.ajoinville.telelog.com.br
+        Map<String, String> formData = new HashMap<String, String>();
+        formData.put("loginForm", "loginForm");
+        formData.put("loginForm:username", "Jeferson.machado");
+        formData.put("loginForm:password", "99823489");
+        formData.put("loginForm:submit", "Login");
+        formData.put("javax.faces.ViewState", "j_id1");
+
+        Connection.Response ress = Jsoup
+                .connect(urlLogin)
+                .method(Connection.Method.GET)
+                .timeout(0)
+                .execute();
+
+        String sessionID = ress.cookie("JSESSIONID");
+
+        Jsoup.connect(urlLogin)
+                .data(formData)
+                .cookie("JSESSIONID", sessionID)
+                .method(Connection.Method.POST)
+                .timeout(0)
+                .execute().cookie("JSESSIONID");
+
+
+
         // add header
         post.setHeader("User-Agent", USER_AGENT);
-        post.setHeader("Cookie", "JSESSIONID=90926412D612DEE93CC3B675EE445CCC");
-        post.setHeader("Accept","text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8");
-        post.setHeader("Accept-Encoding","gzip, deflate");
+        post.setHeader("Cookie", "JSESSIONID=" + sessionID);
+        post.setHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8");
+        post.setHeader("Accept-Encoding", "gzip, deflate");
 
         List<NameValuePair> urlParameters = new ArrayList<>();
         urlParameters.add(new BasicNameValuePair("javax.faces.ViewState", "j_id3"));
@@ -108,7 +103,6 @@ public class HttpClientExample {
         post.setEntity(new UrlEncodedFormEntity(urlParameters));
 
         HttpResponse response = httpClient.execute(post);
-
         InputStream is = response.getEntity().getContent();
         FileOutputStream fos = new FileOutputStream("D:/" + response.getLastHeader("Content-Disposition").getValue().split("filename=")[1]);
 
@@ -121,7 +115,8 @@ public class HttpClientExample {
         fos.close();
     }
 
-    private void login() {
+    private String login() throws IOException {
 
+        return null;
     }
 }
