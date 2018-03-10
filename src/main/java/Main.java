@@ -1,6 +1,8 @@
 import analysis.Analyze;
 import core.Core;
 import utils.AbreExcel;
+import utils.ConsoleUtils;
+import utils.GithubUpdate;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -10,7 +12,12 @@ import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
+
+        //Verica novas atualizacoes
+        if(GithubUpdate.newUpdate())
+            System.out.println(ConsoleUtils.ANSI_PURPLE + "NOVA ATUALIZAÇÃO EM: github.com/Jefersonnnn/resumoSAA/releases" + ConsoleUtils.ANSI_RESET);
+
         //Diretorio contendo os arquivos .xls para serem analisados
         File pasta = new File("DataEntry");
 
