@@ -16,7 +16,7 @@ import java.util.List;
  * Sem valores negativos
  * Sem valores muito acima (analisar %)
  */
-public class Analyze implements Analise {
+public class Analyze {
 
     private DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("hh:mm");
@@ -184,6 +184,41 @@ public class Analyze implements Analise {
     }
 
     private void minimumDaily() {
+        LocalDateTime start = equipment.getData().get(0);
+        LocalDateTime finish = equipment.getData().get(equipment.getData().size() - 1);
+        List<PrintResult> results = new ArrayList<>();
+        double minimaD = 9999;
+        LocalDateTime horaMinima = equipment.getData().get(0);
 
+        for (LocalDateTime dia = start; !dia.isAfter(finish); dia = dia.plusDays(1)) {
+
+            for (int i = 0; i < equipment.getMedida().size(); i++) {
+                if (dia.format(dateFormatter).equals(equipment.getData().get(i).format(dateFormatter))) {
+                    if (equipment.getMedida().get(i) >= 0) {
+                        if (equipment.getMedida().get(i) < minimaD) {
+                            minimaD = equipment.getMedida().get(i);
+                            horaMinima = equipment.getData().get(i);
+                        }
+                    }
+                }
+            }
+
+            if (horaMinima == null)
+                horaMinima = dia;
+
+            if(minimaD == 9999)
+                results.add(new PrintResult(horaMinima, "ERRO"));
+            else
+                results.add(new PrintResult(horaMinima, minimaD + " às " + horaMinima.format(dateTimeFormatter)));
+
+            //Reseta os valores
+            minimaD = 9999;
+            horaMinima = null;
+        }
+
+        DrawPrintResult dp = new DrawPrintResult();
+        dp.setPrintResults(results);
+        dp.setType("Minima Diária");
+        drawPrintResults.add(dp);
     }
 }
