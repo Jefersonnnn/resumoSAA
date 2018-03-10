@@ -1,17 +1,132 @@
-public void createExcelFile(final HttpServletResponse response) {
-    XSSFWorkbook xssfWorkbook = null;
-    try {
-        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-        response.setHeader("Content-Disposition", "attachment; filename=" file.xlsx");
+# Necessário transformar em TOML
 
-        xssfWorkbook = new XSSFWorkbook();
-        final XSSFSheet sheet = xssfWorkbook.createSheet("sheet1");
-
-        writeExcelOutputData(//WRITE DATA TO FILE/SHEET/CELLS);
-
-        xssfWorkbook.write(response.getOutputStream());
-        xssfWorkbook.close();
-    } catch (final Exception e) {
-        LOGGER.error("File not created for download"));
-    }
-}
+* | Value | = | Name | 
+* - 124 = Booster - Waldemiro Jose Borges <br />
+* 125 = Booster Cubatao - Rudolpho Kreling <br />
+* 126 = Booster R A - Curt Alvino Monich <br />
+* 127 = Booster R A - Lind&oacute;ia 
+* 128 = Booster R 00 - Benjamin Willian Frank 
+* 129 = Booster R 00 - Bigua&ccedil;u 
+* 130 = Booster R 00 - Carlos Koepp 
+* 131 = Booster R 00 - Paulo Fischer 
+* 132 = Booster R 00 - Urbano Gern 
+* 133 = Booster R 02 - Almirante Jaceguay 
+* 134 = Booster R 02 - Visconde de Maua 
+* 135 = Booster R 04 - Augusto Salfer 
+* 136 = Booster R 04 - Belarmino Garcia 
+* 137 = Booster R 04 - Francisca Gon&ccedil;alves da Silva 
+* 138 = Booster R 04 - Jos&eacute; Renta Filho T8 - NS 0020
+* 139 = Booster R 04 - Pi&ccedil;arras 
+* 140 = Booster R 04 - Sim&atilde;o Krugger 
+* 141 = Booster R 05 - Anaburgo 
+* 142 = Booster R 05 - Ivor&atilde; 
+* 143 = Booster R 06 - Mildau 
+* 144 = Booster R 07 - Henrique Tamanini 
+* 145 = Booster R 07 - Jo&atilde;o de Barro 
+* 146 = Booster R 07 - Manoel Francisco de Oliveira 
+* 147 = Booster R 08 - Barriga Verde 
+* 148 = Booster R 08 - Borges de Medeiros 
+* 149 = Booster R 08 - Cerro Verde 
+* 150 = Booster R 08 - Condominio Orleans 
+* 151 = Booster R 08 - Deputado Jota Gon&ccedil;alves 
+* 152 = Booster R 08 - General Osorio 
+* 153 = Booster R 08 - Guerra Junqueira 
+* 154 = Booster R 08 - Humaita 
+* 155 = Booster R 08 - Itajub&aacute; 
+* 156 = Booster R 08 - Jacutinga 
+* 157 = Booster R 08 - Miguel Zattar 
+* 158 = Booster R 08 - Orlando Schroeder 
+* 159 = Booster R 08 - Pero Vaz de Caminha 
+* 160 = Booster R 08 - Piratuba 
+* 161 = Booster R 08 - Riachuelo 
+* 162 = Booster R 08 - Salvador 
+* 163 = Booster R 08 - Tr&ecirc;s Barras 
+* 164 = Booster R 10 - Americo Vespucio 
+* 165 = Booster R 10 - Copacabana 
+* 166 = Booster R 10 - Jos&eacute; Rafael Reinert 
+* 167 = Booster R 10 - Martin Richter 
+* 168 = Booster R 10 - Otto Hoffmann 
+* 169 = Booster R 10 - Paulo Schossland 
+* 170 = Booster R 10 - Porto Rico 
+* 171 = Booster R 10 - S&atilde;o Roque 
+* 172 = Booster R 10 - Willy Tilp 
+* 173 = Booster R 11 - Alfenas 
+* 174 = Booster R 11 - Augusto Kluck 
+* 175 = Booster R 11 - Balduino Brumuller 
+* 176 = Booster R 11 - Charlote Schoene 
+* 177 = Booster R 11 - Francisco Boettcher 
+* 178 = Booster R 11 - Jasmin 
+* 179 = Booster R 11 - Salinas 
+* 180 = Booster R 12 - Aulo A. Francisco T08 NS 23
+* 181 = Booster R 12 - Bruno Zuttion 
+* 182 = Booster R 12 - Comandante Alberto Lepper 
+* 183 = Booster R 12 - Francisco Floriano x Boehmerwald 
+* 184 = Booster R 12 - Jo&atilde;o Bernardino da Silveira 
+* 185 = Booster R 12 - Jo&atilde;o Luiz de Miranda Coutinho
+* 186 = Booster R 12 - Jo&atilde;o Medeiros 
+* 187 = Booster R 12 - Moldadores 
+* 188 = Booster R 12 - Paula Mayerle Wulf 
+* 189 = Booster R 12 - Ros&acirc;ngela Lopes 
+* 190 = Booster R 12 - Treviso 
+* 191 = E T A - Cubat&atilde;o 
+* 192 = E T A - Cubat&atilde;o 
+* 193 = E T A - Cubat&atilde;o 
+* 194 = E T A - Cubat&atilde;o 
+* 195 = E T A - Cubat&atilde;o 
+* 196 = E T A - Cubat&atilde;o - 
+* 197 = E T A - Cubat&atilde;o - Filtros 02
+* 198 = E T A - Cubat&atilde;o - Lab. Operacional 01
+* 199 = E T A - Cubat&atilde;o - Lab. Operacional 02
+* 200 = E T A - Cubat&atilde;o Macro Vaz&atilde;o 1000 
+* 201 = E T A - Esta&ccedil;&atilde;o de Tratamento de Lodo da ETA Cubat&atilde;o Prensa
+* 202 = E T A - Pira&iacute; T08 - NS 17
+* 203 = Macro Cubat&atilde;o: Aub&eacute; - Em frente ao T&ecirc;nis Club 
+* 204 = Macro Cubat&atilde;o: Estrada da Ilha - Dona Francisca 
+* 205 = Macro Cubat&atilde;o: Florian&oacute;polis - EEE 
+* 206 = Macro Cubat&atilde;o: Franceses - Opa Bier 
+* 207 = Macro Cubat&atilde;o: Rio Bonito - Avi&aacute;rio entre Pol&iacute;cia e Rio Cubat&atilde;o 
+* 208 = Macro Pira&iacute;: Expoville 
+* 209 = Macro Pira&iacute;: Vila Nova - Estrada do Atalho 
+* 210 = Macro R01: Alferes Schimidt 
+* 211 = Macro R01: Espinheiros - Baltazar Buschle 
+* 212 = Macro R01: Julio Mesquita - Cegonhas 
+* 213 = Macro R01: Sa&iacute;da do Reservatorio 
+* 214 = Macro R02: Albatroz 
+* 215 = Macro R02: Rui Barbosa
+* 216 = Macro R03: Bucarein - P&aacute;tio da Pol&iacute;cia Civil 
+* 217 = Macro R06: Pirabeiraba Cidade 
+* 218 = Macro R06: Pirabeiraba Serra 
+* 219 = Macro R07: Ipiranga - X Uirapuru 
+* 220 = Macro R07: Jardim Para&iacute;so - Timb&eacute; x Plut&atilde;o 
+* 221 = Macro R07: Nelson Brand&atilde;o, 112 
+* 222 = Macro R07: Waldemar Jo&atilde;o Domingos - Sa&iacute;da Uirapuru
+* 223 = Macro R08: Entrada do Reservatorio R08 - Ca&ccedil;apava, 802 
+* 224 = Macro R08: Jardim Sofia 
+* 225 = Macro R08: Sa&iacute;da do Reservatorio R08 - Inconfidentes, 446 
+* 226 = Macro R10: Jativoca - Joana D&acute;Arc 
+* 227 = Macro R10: Morro do Meio - Minas Gerais, 2658 
+* 228 = Macro R10: Nova Brasilia Sul - Bom Retiro no Posto Sa&uacute;de
+* 229 = Macro R11: Araquari - Waldemiro Borges, 5485 
+* 230 = Macro R11: Profipo - &Aacute;ustria X Waldemiro Borges 
+* 231 = Macro R11: Telefonistas, 35 
+* 232 = Macro R11: Waldemiro Jos&eacute; Borges - Trevo Itinga 
+* 233 = Macro R12: Cidade de Damasco x Rua Florian&oacute;polis 
+* 234 = Macro R12: F&aacute;tima - Marechal Luz 
+* 235 = Macro R12: Loteamento Jos&eacute; Loureiro - Dilson Funaro 
+* 236 = Macro R12: Moldadores - Mons. Gercino 7000 
+* 237 = Macro R12: Paranaguamirim - Gen. Div. Euclides da Cunha 
+* 238 = Macro R12: Parque Guarani - Jo&atilde;o Serafim Machado, 75 
+* 239 = Macro R12: Pedro Felipe Borges, 89 
+* 240 = R0 Reservatorio
+* 241 = R 1 - Reservatorio
+* 242 = R 2 - Reservatorio
+* 243 = R 3 - Reservatorio
+* 244 = R 4 - Reservatorio
+* 245 = R 5 - Reservatorio
+* 246 = R 6 - Reservatorio
+* 247 = R 7 - Reservatorio
+* 248 = R 8 - Reservatorio
+* 249 = R10 - Reservatorio
+* 250 = R11 - Reservatorio
+* 251 = R12 - Reservatorio
+* 252 = R_A - Reservatorio
