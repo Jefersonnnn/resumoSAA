@@ -70,7 +70,7 @@ public class DrawTable {
             if (equipment.getDipositivo() == null || equipment.getDipositivo().equals(""))
                 fw = new FileWriter(localSave + "\\" + equipment.getFileName() + ".html");
             else
-                fw = new FileWriter(localSave + "\\" + Utils.removeSpecialCharacters(equipment.getDipositivo()) + ".html");
+                fw = new FileWriter(localSave + "\\" + Utils.removeSpecialCharacters(equipment.getDipositivo())+ " - " + Utils.removeSpecialCharacters(equipment.getPonto()) + ".html");
             fw.write(table);
             fw.flush();
             fw.close();

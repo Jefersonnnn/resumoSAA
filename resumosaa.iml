@@ -26,5 +26,7 @@
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.9.0" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.9.2" level="project" />
     <orderEntry type="library" name="Maven: commons-io:commons-io:1.4" level="project" />
+    <orderEntry type="library" name="Maven: me.tongfei:progressbar:0.5.5" level="project" />
+    <orderEntry type="library" name="Maven: jline:jline:2.12" level="project" />
   </component>
 </module>

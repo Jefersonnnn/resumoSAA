@@ -1,5 +1,6 @@
 package utils;
 
+import me.tongfei.progressbar.ProgressBar;
 import model.Equipment;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -19,6 +20,7 @@ public class AbreExcel implements Runnable {
 
     private File file;
     private onExcelRead mListener;
+    private Equipment equipment;
 
     public AbreExcel(File file, onExcelRead listener) {
         this.file = file;
@@ -28,7 +30,6 @@ public class AbreExcel implements Runnable {
     /**
      * Abre o arquivo especificado em uma Thread
      *
-     * @param file
      * @return Equipment
      */
     @Override
@@ -36,6 +37,7 @@ public class AbreExcel implements Runnable {
         List<LocalDateTime> datas = new ArrayList<>();
         List<Double> medidas = new ArrayList<>();
         Equipment equipment = new Equipment();
+        ProgressBar progressBar = null;
 
         try {
             FileInputStream arquivo = new FileInputStream(file);
@@ -44,10 +46,13 @@ public class AbreExcel implements Runnable {
             HSSFSheet sheetEquipamento = workbook.getSheetAt(0);
 
             Iterator<Row> rowIterator = sheetEquipamento.iterator();
-
+            progressBar = new ProgressBar(file.getName(), sheetEquipamento.getLastRowNum());
+            progressBar.start();
             while (rowIterator.hasNext()) {
-                Row row = rowIterator.next();
 
+                Row row = rowIterator.next();
+                progressBar.step();
+                progressBar.setExtraMessage("Analisando...");
                 //Pega as 4 primeiras linhas do arquivo excel
                 //0 Descartado
                 //1 Instalação
@@ -62,6 +67,19 @@ public class AbreExcel implements Runnable {
                         break;
                     case 3:
                         equipment.setPeriodo(row.getCell(1).getStringCellValue());
+                        break;
+                    case 5:
+                        try {
+                            if (row.getCell(1).getStringCellValue() != null) {
+                                equipment.setPonto(row.getCell(1).getStringCellValue());
+                            } else if (row.getCell(2).getStringCellValue() != null) {
+                                equipment.setPonto(row.getCell(2).getStringCellValue());
+                            } else {
+                                equipment.setPonto("PONTO");
+                            }
+                        }catch (NullPointerException e) {
+                            equipment.setPonto("PONTO");
+                        }
                         break;
                 }
 
@@ -83,9 +101,9 @@ public class AbreExcel implements Runnable {
             System.out.println("Arquivo Excel não encontrado: " + file.getAbsolutePath());
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            progressBar.stop();
         }
-
-        System.out.println("FINISH " + this.toString());
         mListener.onFinish(equipment);
     }
 
@@ -93,4 +111,8 @@ public class AbreExcel implements Runnable {
         void onFinish(Equipment equipment);
     }
 
+    @Override
+    public String toString() {
+        return equipment.getFileName();
+    }
 }

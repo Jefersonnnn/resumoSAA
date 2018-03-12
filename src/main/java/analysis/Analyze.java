@@ -209,7 +209,7 @@ public class Analyze {
             if(minimaD == 9999)
                 results.add(new PrintResult(horaMinima, "ERRO"));
             else
-                results.add(new PrintResult(horaMinima, minimaD + " às " + horaMinima.format(dateTimeFormatter)));
+                results.add(new PrintResult(horaMinima, minimaD + ";" + horaMinima.format(dateTimeFormatter)));
 
             //Reseta os valores
             minimaD = 9999;

@@ -9,17 +9,28 @@ public class Equipment {
     private String       instalacao;
     private String       dipositivo;
     private String       periodo;
+    private String       ponto;
     private List<Double> medida;
     private List<LocalDateTime>   data;
 
     public Equipment() {}
 
-    public Equipment(String instalacao, String dipositivo, String periodo, List<Double> medida, List<LocalDateTime> data) {
+    public Equipment(String fileName, String instalacao, String dipositivo, String periodo, String ponto, List<Double> medida, List<LocalDateTime> data) {
+        this.fileName = fileName;
         this.instalacao = instalacao;
         this.dipositivo = dipositivo;
         this.periodo = periodo;
+        this.ponto = ponto;
         this.medida = medida;
         this.data = data;
+    }
+
+    public String getPonto() {
+        return ponto;
+    }
+
+    public void setPonto(String ponto) {
+        this.ponto = ponto;
     }
 
     public String getFileName() {
