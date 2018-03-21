@@ -10,8 +10,8 @@
 * 130 = Booster R 00 - Carlos Koepp 
 * 131 = Booster R 00 - Paulo Fischer 
 * 132 = Booster R 00 - Urbano Gern 
-* 133 = Booster R 02 - Almirante Jaceguay => mudou para 136
-** Device: 258 
+* 133 = Booster R 02 - Almirante Jaceguay => **mudou para 136
+Device: 258**
 * 134 = Booster R 02 - Visconde de Maua 
 * 135 = Booster R 04 - Augusto Salfer 
 * 136 = Booster R 04 - Belarmino Garcia 
