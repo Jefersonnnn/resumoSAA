@@ -42,6 +42,9 @@ public class Analyze {
                 case "MAXD":
                     maximumDaily();
                     break;
+                case "MED":
+                    average();
+                    break;
             }
         }
 
@@ -101,7 +104,7 @@ public class Analyze {
 
         DrawPrintResult dp = new DrawPrintResult();
         dp.setPrintResults(results);
-        dp.setType("Fator de Pesquisa");
+        dp.setType("FP");
         drawPrintResults.add(dp);
     }
 
@@ -132,7 +135,7 @@ public class Analyze {
             if (minimaN == 9999)
                 results.add(new PrintResult(horaMinima, "fora do horário para mínima noturna"));
             else
-                results.add(new PrintResult(horaMinima, String.valueOf(minimaN)));
+                results.add(new PrintResult(horaMinima, df.format(minimaN)));
 
             //Reseta os valores
             minimaN = 9999;
@@ -141,7 +144,7 @@ public class Analyze {
 
         DrawPrintResult dp = new DrawPrintResult();
         dp.setPrintResults(results);
-        dp.setType("Minima Noturna");
+        dp.setType("MN");
         drawPrintResults.add(dp);
     }
 
@@ -170,7 +173,7 @@ public class Analyze {
             if (maximaD == 0)
                 results.add(new PrintResult(horaMaxima, "ERRO"));
             else
-                results.add(new PrintResult(horaMaxima, maximaD +" às "+ horaMaxima.format(dateTimeFormatter)));
+                results.add(new PrintResult(horaMaxima, df.format(maximaD) + ";" + horaMaxima.format(dateTimeFormatter)));
 
             //Reseta os valores
             maximaD = 0;
@@ -206,10 +209,10 @@ public class Analyze {
             if (horaMinima == null)
                 horaMinima = dia;
 
-            if(minimaD == 9999)
+            if (minimaD == 9999)
                 results.add(new PrintResult(horaMinima, "ERRO"));
             else
-                results.add(new PrintResult(horaMinima, minimaD + ";" + horaMinima.format(dateTimeFormatter)));
+                results.add(new PrintResult(horaMinima, df.format(minimaD) + ";" + horaMinima.format(dateTimeFormatter)));
 
             //Reseta os valores
             minimaD = 9999;
@@ -219,6 +222,41 @@ public class Analyze {
         DrawPrintResult dp = new DrawPrintResult();
         dp.setPrintResults(results);
         dp.setType("Minima Diária");
+        drawPrintResults.add(dp);
+    }
+
+    private void average() {
+        LocalDateTime start = equipment.getData().get(0);
+        LocalDateTime finish = equipment.getData().get(equipment.getData().size() - 1);
+        LocalDateTime dataMedida;
+        double sum = 0, media;
+        int qtdMedidasValidas = 0;
+        List<PrintResult> results = new ArrayList<>();
+
+        for (LocalDateTime dia = start; !dia.isAfter(finish); dia = dia.plusDays(1)) {
+            dataMedida = dia;
+            for (int i = 0; i < equipment.getMedida().size(); i++) {
+                if (dia.format(dateFormatter).equals(equipment.getData().get(i).format(dateFormatter))) {
+                    if (equipment.getMedida().get(i) >= 0) {
+                        sum += equipment.getMedida().get(i);
+                        qtdMedidasValidas++;
+                    }
+                }
+            }
+
+            media = sum / qtdMedidasValidas;
+
+            results.add(new PrintResult(dataMedida, String.valueOf(df.format(media))));
+
+            //Reseta os valores
+            media = 0;
+            qtdMedidasValidas = 0;
+            sum = 0;
+        }
+
+        DrawPrintResult dp = new DrawPrintResult();
+        dp.setPrintResults(results);
+        dp.setType("Média diária");
         drawPrintResults.add(dp);
     }
 }

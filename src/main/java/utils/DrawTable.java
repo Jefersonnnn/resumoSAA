@@ -43,21 +43,34 @@ public class DrawTable {
                 .append("<h2>").append(equipment.getDipositivo()).append("</h2>")
                 .append("<table>" +
                         "<tr>")
-                .append("<th>Data</th>");
+                .append("<th>Data</th>")
+                .append("<th>Tipo</th>")
+                .append("<th>Equipamento</th>")
+                .append("<th>Valor</th>")
+        ;
 
+        /*
         for (DrawPrintResult result : results) {
             table.append("<th>").append(result.getType()).append("</th>");
-        }
+        }*/
+
+
         table.append("</tr>");
 
         for (int i = 0; i < results.get(0).getPrintResults().size(); i++) {
             table.append("<tr>");
-            table.append("<td>").append(results.get(0).getPrintResults().get(i).getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+
             for (int j = 0; j < results.size(); j++) {
-                    table.append("<td>").append(results.get(j).getPrintResults().get(i).getMedida().replace('.', ','));
+                table.append("<td>").append(results.get(0).getPrintResults().get(i).getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+                table.append("<td>").append(results.get(j).getType());
+                table.append("<td>").append(equipment.getDipositivo());
+                table.append("<td>").append(results.get(j).getPrintResults().get(i). getMedida().replace('.', ','));
+                table.append("</tr>");
             }
-            table.append("</tr>");
+
         }
+
+
         saveTableInDotHtml(String.valueOf(table), equipment);
     }
 

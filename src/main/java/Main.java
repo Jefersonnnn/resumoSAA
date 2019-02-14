@@ -3,6 +3,7 @@ import core.Core;
 import utils.AbreExcel;
 import utils.ConsoleUtils;
 import utils.GithubUpdate;
+import utils.HttpClientExample;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -13,6 +14,9 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) throws Exception {
+
+        //Baixa os Excel
+        HttpClientExample getExcels = new HttpClientExample();
 
         //Verica novas atualizacoes
         if(GithubUpdate.newUpdate())
@@ -43,12 +47,14 @@ public class Main {
                 optionsAnalysis.add(0, scanner.next());
             }
             while (!optionsAnalysis.get(0).toUpperCase().equals("V") && !optionsAnalysis.get(0).toUpperCase().equals("H"));
-            System.out.println("Digite as opcoes para análise [MN]Minima Noturna | [FP]Fator de Pesquisa | [MinD]Minima Diaria | [MaxD]Maxima Diaria:");
+            System.out.println("Digite as opções para análise:\n-> [MN]   Mínima Noturna\n" +
+                                                                "-> [FP]   Fator de Pesquisa\n" +
+                                                                "-> [MinD] Mínima Diária\n" +
+                                                                "-> [MaxD] Máxima Diária\n" +
+                                                                "-> [MED]  Média Diária");
             scanner.nextLine();
             String teste = scanner.nextLine();
             optionsAnalysis.addAll(Arrays.asList(teste.split(" ")));
-            scanner.close();
-
 
             //Lista todos os arquivos da pasta
             File[] arquivos = pasta.listFiles();
@@ -62,5 +68,8 @@ public class Main {
                 threads[i].start();
             }
         }
+
+        scanner.nextLine();
+        scanner.close();
     }
 }

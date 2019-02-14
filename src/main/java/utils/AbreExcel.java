@@ -1,6 +1,5 @@
 package utils;
 
-import me.tongfei.progressbar.ProgressBar;
 import model.Equipment;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -37,22 +36,17 @@ public class AbreExcel implements Runnable {
         List<LocalDateTime> datas = new ArrayList<>();
         List<Double> medidas = new ArrayList<>();
         Equipment equipment = new Equipment();
-        ProgressBar progressBar = null;
 
         try {
             FileInputStream arquivo = new FileInputStream(file);
             equipment.setFileName(file.getName());
             HSSFWorkbook workbook = new HSSFWorkbook(arquivo);
             HSSFSheet sheetEquipamento = workbook.getSheetAt(0);
-
+            System.out.println("Analisando..." + file.getName() + "...");
             Iterator<Row> rowIterator = sheetEquipamento.iterator();
-            progressBar = new ProgressBar(file.getName(), sheetEquipamento.getLastRowNum());
-            progressBar.start();
             while (rowIterator.hasNext()) {
 
                 Row row = rowIterator.next();
-                progressBar.step();
-                progressBar.setExtraMessage("Analisando...");
                 //Pega as 4 primeiras linhas do arquivo excel
                 //0 Descartado
                 //1 Instalação
@@ -102,7 +96,7 @@ public class AbreExcel implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            progressBar.stop();
+            System.out.println("Finalizado: " + file.getName() + " :)");
         }
         mListener.onFinish(equipment);
     }
