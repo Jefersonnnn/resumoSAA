@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.net.ConnectException;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.time.LocalDateTime;
@@ -30,6 +31,8 @@ public class GithubUpdate {
 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             LocalDateTime publishedAt = LocalDateTime.parse(repos.published_at.replace("Z", "").replace("T", " "), formatter);
+            if (dataRelease.isBefore(publishedAt))
+                    System.out.println(repos.tag_name + " Disponivel");
 
             return dataRelease.isBefore(publishedAt);
         }
@@ -50,8 +53,8 @@ public class GithubUpdate {
                 buffer.append(chars, 0, read);
 
             return buffer.toString();
-        } catch (UnknownHostException ex) {
-            System.err.println("Atualização: não foi possível acessar o host 'api.github.com'");
+        } catch (UnknownHostException | ConnectException ex) {
+            System.err.println("Atualização: não foi possível verificar novas atualizações");
             return null;
         } finally {
             if (reader != null)

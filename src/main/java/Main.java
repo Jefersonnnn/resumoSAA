@@ -16,9 +16,10 @@ public class Main {
     public static void main(String[] args) throws Exception {
 
         //Baixa os Excel
-        HttpClientExample getExcels = new HttpClientExample();
+       // HttpClientExample getExcels = new HttpClientExample();
 
         //Verica novas atualizacoes
+        System.out.println("Aguarde... Verificando atualizações...");
         if(GithubUpdate.newUpdate())
             System.out.println(ConsoleUtils.ANSI_PURPLE + "NOVA ATUALIZAÇÃO EM: github.com/Jefersonnnn/resumoSAA/releases" + ConsoleUtils.ANSI_RESET);
 
@@ -67,6 +68,13 @@ public class Main {
                 threads[i] = new Thread(abrirArquivos[i]);
                 threads[i].start();
             }
+
+            for (int i = 0; i < arquivos.length; i++) {
+                threads[i].join();
+            }
+
+            System.out.println("Todos os arquivos foram analisados! Precione qualquer tecla para Finalizar!");
+
         }
 
         scanner.nextLine();
