@@ -3,7 +3,6 @@ import core.Core;
 import utils.AbreExcel;
 import utils.ConsoleUtils;
 import utils.GithubUpdate;
-import utils.HttpClientExample;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -15,11 +14,8 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
 
-        //Baixa os Excel
-        HttpClientExample getExcels = new HttpClientExample();
-
         //Verica novas atualizacoes
-        if(GithubUpdate.newUpdate())
+        if (GithubUpdate.newUpdate())
             System.out.println(ConsoleUtils.ANSI_PURPLE + "NOVA ATUALIZAÇÃO EM: github.com/Jefersonnnn/resumoSAA/releases" + ConsoleUtils.ANSI_RESET);
 
         //Diretorio contendo os arquivos .xls para serem analisados
@@ -48,10 +44,10 @@ public class Main {
             }
             while (!optionsAnalysis.get(0).toUpperCase().equals("V") && !optionsAnalysis.get(0).toUpperCase().equals("H"));
             System.out.println("Digite as opções para análise:\n-> [MN]   Mínima Noturna\n" +
-                                                                "-> [FP]   Fator de Pesquisa\n" +
-                                                                "-> [MinD] Mínima Diária\n" +
-                                                                "-> [MaxD] Máxima Diária\n" +
-                                                                "-> [MED]  Média Diária");
+                    "-> [FP]   Fator de Pesquisa\n" +
+                    "-> [MinD] Mínima Diária\n" +
+                    "-> [MaxD] Máxima Diária\n" +
+                    "-> [MED]  Média Diária");
             scanner.nextLine();
             String teste = scanner.nextLine();
             optionsAnalysis.addAll(Arrays.asList(teste.split(" ")));
@@ -62,9 +58,9 @@ public class Main {
             Thread[] threads = new Thread[arquivos.length];
 
             for (int i = 0; i < arquivos.length; i++) {
-                if(arquivos[i].getName().endsWith(".xls")){
-                    System.out.println(arquivos[i].getName() + ": Suporte aos arquivos .xls (Excel 2003 ou anterior) foram descontinuados.");
-                }else {
+                if (arquivos[i].getName().endsWith(".xls")) {
+                    System.out.println("ATENÇÃO [" + arquivos[i].getName() + "] Suporte aos arquivos .xls (Excel 2003 ou anterior) foram descontinuados.");
+                } else {
                     final List<String> tmp = optionsAnalysis;
                     abrirArquivos[i] = new AbreExcel(arquivos[i], equipment -> new Analyze(equipment, tmp));
                     threads[i] = new Thread(abrirArquivos[i]);
@@ -75,5 +71,7 @@ public class Main {
 
         scanner.nextLine();
         scanner.close();
+
+        System.out.println("Pressione qualquer tecla para sair..");
     }
 }

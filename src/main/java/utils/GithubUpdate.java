@@ -17,10 +17,11 @@ class Repos {
 
 public class GithubUpdate {
 
-    private static LocalDateTime dataRelease = LocalDateTime.of(2019, Month.NOVEMBER, 04, 12,00 );
+    private static LocalDateTime dataRelease = LocalDateTime.of(2019, Month.NOVEMBER, 4, 14,30 );
 
     public static boolean newUpdate() throws Exception {
 
+        System.out.println("Verificando novas atualizações...");
         String json = readUrl("https://api.github.com/repos/Jefersonnnn/resumoSAA/releases/latest");
         Gson gson = new Gson();
         Repos repos = null;
@@ -32,9 +33,7 @@ public class GithubUpdate {
 
             return dataRelease.isBefore(publishedAt);
         }
-
         return false;
-
     }
 
     private static String readUrl(String urlString) throws Exception {
