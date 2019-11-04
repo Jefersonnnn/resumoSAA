@@ -3,7 +3,7 @@ package core;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
-import model.EquipmentValueTelelog;
+import model.Equipment;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -14,7 +14,7 @@ import java.util.List;
 
 public class Core {
 
-    private static final Type EQUIPMENT_TYPE = new TypeToken<List<EquipmentValueTelelog>>() {
+    private static final Type EQUIPMENT_TYPE = new TypeToken<List<Equipment>>() {
     }.getType();
 
     public static void loadInitialConfiguration() {
@@ -23,7 +23,7 @@ public class Core {
             File configJson = new File("config.json");
             if (configJson.exists()) {
                 JsonReader reader = new JsonReader(new FileReader("config.json"));
-                List<EquipmentValueTelelog> telelogList = gson.fromJson(reader, EQUIPMENT_TYPE);
+                List<Equipment> telelogList = gson.fromJson(reader, EQUIPMENT_TYPE);
                 System.out.println("");
             } else {
                 try {

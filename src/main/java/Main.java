@@ -62,10 +62,14 @@ public class Main {
             Thread[] threads = new Thread[arquivos.length];
 
             for (int i = 0; i < arquivos.length; i++) {
-                final List<String> tmp = optionsAnalysis;
-                abrirArquivos[i] = new AbreExcel(arquivos[i], equipment -> new Analyze(equipment, tmp));
-                threads[i] = new Thread(abrirArquivos[i]);
-                threads[i].start();
+                if(arquivos[i].getName().endsWith(".xls")){
+                    System.out.println(arquivos[i].getName() + ": Suporte aos arquivos .xls (Excel 2003 ou anterior) foram descontinuados.");
+                }else {
+                    final List<String> tmp = optionsAnalysis;
+                    abrirArquivos[i] = new AbreExcel(arquivos[i], equipment -> new Analyze(equipment, tmp));
+                    threads[i] = new Thread(abrirArquivos[i]);
+                    threads[i].start();
+                }
             }
         }
 

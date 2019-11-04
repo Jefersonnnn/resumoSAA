@@ -54,7 +54,6 @@ public class DrawTable {
             table.append("<th>").append(result.getType()).append("</th>");
         }*/
 
-
         table.append("</tr>");
 
         for (int i = 0; i < results.get(0).getPrintResults().size(); i++) {

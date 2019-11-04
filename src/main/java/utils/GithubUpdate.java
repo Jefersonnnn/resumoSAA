@@ -8,7 +8,6 @@ import java.net.URL;
 import java.net.UnknownHostException;
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 class Repos {
@@ -18,7 +17,7 @@ class Repos {
 
 public class GithubUpdate {
 
-    private static LocalDateTime dataRelease = LocalDateTime.of(2019, Month.FEBRUARY, 14, 20, 40);
+    private static LocalDateTime dataRelease = LocalDateTime.of(2019, Month.FEBRUARY, 14, 23, 40);
 
     public static boolean newUpdate() throws Exception {
 
