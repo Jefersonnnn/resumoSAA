@@ -1,5 +1,7 @@
 package utils;
 
+import analysis.Analyze;
+import model.DrawPrintResult;
 import model.Equipment;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -23,10 +25,18 @@ public class AbreExcel implements Runnable {
     private File file;
     private onExcelRead mListener;
     private Equipment equipment;
+    private List<String> optionsAnalysis;
+    private List<DrawPrintResult> drawPrintResultList;
 
     public AbreExcel(File file, onExcelRead listener) {
         this.file = file;
         this.mListener = listener;
+    }
+
+    public AbreExcel(File file, List<String> optionsAnalysis) {
+        this.file = file;
+        this.optionsAnalysis = optionsAnalysis;
+        drawPrintResultList = new ArrayList<>();
     }
 
     /**
@@ -108,13 +118,27 @@ public class AbreExcel implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
+            this.equipment = equipment;
+            //Objects.requireNonNull(mListener).onFinish(equipment);
+
+            //Realiza a análise dos dados
+            Analyze analises = new Analyze();
+            drawPrintResultList = analises.Analyze(this.equipment, optionsAnalysis);
+
             System.out.println("Finalizado: " + file.getName() + " :)");
         }
-        mListener.onFinish(equipment);
     }
 
     public interface onExcelRead {
         void onFinish(Equipment equipment);
+    }
+
+    public Equipment returnEquipament(){
+        return equipment;
+    }
+
+    public List<DrawPrintResult> returnDrawPrintResults(){
+        return drawPrintResultList;
     }
 
     @Override

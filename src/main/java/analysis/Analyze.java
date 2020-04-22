@@ -3,7 +3,6 @@ package analysis;
 import model.DrawPrintResult;
 import model.Equipment;
 import model.PrintResult;
-import utils.DrawTable;
 
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
@@ -24,7 +23,7 @@ public class Analyze {
     private Equipment equipment;
     private List<DrawPrintResult> drawPrintResults;
 
-    public Analyze(Equipment equipment, List<String> optionsAnalyze) {
+    public List<DrawPrintResult> Analyze(Equipment equipment, List<String> optionsAnalyze) {
         this.equipment = equipment;
         this.drawPrintResults = new ArrayList<>();
 
@@ -48,16 +47,18 @@ public class Analyze {
             }
         }
 
-        if (drawPrintResults.size() > 0 && drawPrintResults != null)
-            if (optionsAnalyze.get(0).toUpperCase().equals("H"))
-                DrawTable.drawTableH(drawPrintResults, equipment);
-            else
-                DrawTable.drawTableV(drawPrintResults, equipment);
+        return drawPrintResults;
+
+//        if (drawPrintResults.size() > 0 && drawPrintResults != null)
+//            if (optionsAnalyze.get(0).toUpperCase().equals("H"))
+//                DrawTable.drawTableH(drawPrintResults, equipment);
+//            else
+//                DrawTable.drawTableV(drawPrintResults, equipment);
 
     }
 
     /**
-     * Fator de pesquisa (FP) é calculado com a minima norturna dividido pela média diaria.
+     * Fator de pesquisa (FP) é calculado com a minima noturna dividido pela média diária.
      * O valor deverá ser algo em torno de 0 e 1 (acima de 0,3 provavel vazamento na região)
      * Excluindo valor abaixo de 0.
      */
@@ -105,6 +106,7 @@ public class Analyze {
         DrawPrintResult dp = new DrawPrintResult();
         dp.setPrintResults(results);
         dp.setType("FP");
+        dp.setEquipment(equipment.getInstalacao());
         drawPrintResults.add(dp);
     }
 
@@ -145,6 +147,7 @@ public class Analyze {
         DrawPrintResult dp = new DrawPrintResult();
         dp.setPrintResults(results);
         dp.setType("MN");
+        dp.setEquipment(equipment.getInstalacao());
         drawPrintResults.add(dp);
     }
 
@@ -183,6 +186,7 @@ public class Analyze {
         DrawPrintResult dp = new DrawPrintResult();
         dp.setPrintResults(results);
         dp.setType("Máxima Diária");
+        dp.setEquipment(equipment.getInstalacao());
         drawPrintResults.add(dp);
     }
 
@@ -222,6 +226,7 @@ public class Analyze {
         DrawPrintResult dp = new DrawPrintResult();
         dp.setPrintResults(results);
         dp.setType("Minima Diária");
+        dp.setEquipment(equipment.getInstalacao());
         drawPrintResults.add(dp);
     }
 
@@ -257,6 +262,7 @@ public class Analyze {
         DrawPrintResult dp = new DrawPrintResult();
         dp.setPrintResults(results);
         dp.setType("Média diária");
+        dp.setEquipment(equipment.getInstalacao());
         drawPrintResults.add(dp);
     }
 }
