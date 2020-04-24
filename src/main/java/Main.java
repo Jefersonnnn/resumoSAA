@@ -1,4 +1,3 @@
-import analysis.Analyze;
 import core.Core;
 import model.DrawPrintResult;
 import utils.AbreExcel;
@@ -10,6 +9,9 @@ import java.io.File;
 import java.util.*;
 
 public class Main {
+
+//    private static final int MAX_THREADS = 4;
+//    private static final Semaphore semaforo = new Semaphore(MAX_THREADS);
 
     public static void main(String[] args) throws Exception {
 
@@ -37,12 +39,13 @@ public class Main {
             System.exit(0);
         } else {
 
-            //Forçar o uso da opção Vertical V
+
             do {
                 optionsAnalysis.clear();
                 System.out.println("Formato de Impressão [V][H]:");
                 optionsAnalysis.add(0, scanner.next());
             } while (!optionsAnalysis.get(0).toUpperCase().equals("V") && !optionsAnalysis.get(0).toUpperCase().equals("H"));
+
 
             System.out.println("Digite as opções para análise:\n-> [MN]   Mínima Noturna\n" +
                     "-> [FP]   Fator de Pesquisa\n" +
@@ -53,33 +56,46 @@ public class Main {
             String optForAnalyses = scanner.nextLine();
             optionsAnalysis.addAll(Arrays.asList(optForAnalyses.split(" ")));
 
+
+            System.out.println("\nAguarde... Iniciando...\n");
             //Lista todos os arquivos da pasta
-            File[] arquivos = pasta.listFiles();
-            AbreExcel[] abrirArquivos = new AbreExcel[arquivos.length];
-            Thread[] threads = new Thread[arquivos.length];
-            Analyze analises = new Analyze();
+
+            ArrayList<File> arquivos = new ArrayList<>(Arrays.asList(pasta.listFiles()));
+            AbreExcel[] abrirArquivos = new AbreExcel[arquivos.size()];
+            Thread[] threads = new Thread[arquivos.size()];
 
             final List<String> tmp = optionsAnalysis;
-            for (int i = 0; i < arquivos.length; i++) {
-                if (arquivos[i].getName().endsWith(".xls")) {
-                    System.out.println("ATENÇÃO [" + arquivos[i].getName() + "] Suporte aos arquivos .xls (Excel 2003 ou anterior) foram descontinuados.");
-                } else {
 
-                    //abrirArquivos[i] = new AbreExcel(arquivos[i], equipment -> new Analyze(equipment, tmp));
-                    abrirArquivos[i] = new AbreExcel(arquivos[i], tmp);
-                    threads[i] = new Thread(abrirArquivos[i]);
-                    threads[i].start();
+            int iArq = 0;
+            int qtdArqProce = 0;
+            while (arquivos.size() != 0) {
+                if (qtdArqProce==10){
+                    for (int i = 0; i < iArq; i++) {
+                        threads[i].join();
+                    }
+                    qtdArqProce = 0;
                 }
+                if (arquivos.get(0).getName().endsWith(".xls")) {
+                    System.out.println("ATENÇÃO [" + arquivos.get(0).getName() + "] Suporte aos arquivos .xls (Excel 2003 ou anterior) foram descontinuados.");
+                } else {
+                    //abrirArquivos[iArq] = new AbreExcel(arquivos.get(0), qtdArqProce--);
+                    abrirArquivos[iArq] = new AbreExcel(arquivos.get(0), tmp);
+                    threads[iArq] = new Thread(abrirArquivos[iArq]);
+                    threads[iArq].start();
+                    iArq++;
+                    qtdArqProce++;
+                }
+                arquivos.remove(0);
             }
 
-            for (int i = 0; i < arquivos.length; i++) {
+
+            for (int i = 0; i < abrirArquivos.length; i++) {
                 threads[i].join();
             }
-
             //Salvar o resultado em um arquivo .html
             ArrayList<List<DrawPrintResult>> printResults = new ArrayList<>();
 
-            for (int i = 0; i < arquivos.length; i++) {
+            for (int i = 0; i < abrirArquivos.length; i++) {
                 printResults.add(abrirArquivos[i].returnDrawPrintResults());
             }
 
@@ -93,7 +109,5 @@ public class Main {
         System.out.println("\nPressione qualquer tecla para sair..\n");
         scanner.nextLine();
         scanner.close();
-
-
     }
 }

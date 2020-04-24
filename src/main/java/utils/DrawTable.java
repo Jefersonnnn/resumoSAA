@@ -64,7 +64,7 @@ public class DrawTable {
                         table.append("<td>").append(results.get(i).get(j).getPrintResults().get(x).getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
                         table.append("<td>").append(result.getType());
                         table.append("<td>").append(result.getEquipment());
-                        table.append("<td>").append(result.getPrintResults().get(i).getMedida().replace('.', ','));
+                        table.append("<td>").append(result.getPrintResults().get(x).getMedida().replace('.', ','));
                         table.append("</tr>");
                     }
 

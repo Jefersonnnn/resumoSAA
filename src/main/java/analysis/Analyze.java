@@ -23,6 +23,14 @@ public class Analyze {
     private Equipment equipment;
     private List<DrawPrintResult> drawPrintResults;
 
+    public Analyze(Equipment equipment, List<String> opt){
+        this.equipment = equipment;
+        this.drawPrintResults = new ArrayList<>();
+        Analyze(this.equipment, opt);
+    }
+
+    public Analyze(){    }
+
     public List<DrawPrintResult> Analyze(Equipment equipment, List<String> optionsAnalyze) {
         this.equipment = equipment;
         this.drawPrintResults = new ArrayList<>();
@@ -63,6 +71,7 @@ public class Analyze {
      * Excluindo valor abaixo de 0.
      */
     private void searchFactor() {
+        try {
         LocalDateTime start = equipment.getData().get(0);
         LocalDateTime finish = equipment.getData().get(equipment.getData().size() - 1);
         LocalDateTime dataMedida;
@@ -108,47 +117,59 @@ public class Analyze {
         dp.setType("FP");
         dp.setEquipment(equipment.getInstalacao());
         drawPrintResults.add(dp);
+        }catch (NullPointerException e){
+            System.out.println("Erro no arquivo " + equipment.getFileName());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     private void minimumNight() {
-        LocalDateTime start = equipment.getData().get(0);
-        LocalDateTime finish = equipment.getData().get(equipment.getData().size() - 1);
-        List<PrintResult> results = new ArrayList<>();
-        double minimaN = 9999;
-        LocalDateTime horaMinima = equipment.getData().get(0);
+        try {
+            LocalDateTime start = equipment.getData().get(0);
+            LocalDateTime finish = equipment.getData().get(equipment.getData().size() - 1);
+            List<PrintResult> results = new ArrayList<>();
+            double minimaN = 9999;
+            LocalDateTime horaMinima = equipment.getData().get(0);
 
-        for (LocalDateTime dia = start; !dia.isAfter(finish); dia = dia.plusDays(1)) {
-
-            for (int i = 0; i < equipment.getMedida().size(); i++) {
-                if (dia.format(dateFormatter).equals(equipment.getData().get(i).format(dateFormatter))) {
-                    //Minima noturna fica entre a 00:00h e 05:00h
-                    if (equipment.getData().get(i).getHour() < 5 && equipment.getMedida().get(i) >= 0) {
-                        if (equipment.getMedida().get(i) < minimaN) {
-                            minimaN = equipment.getMedida().get(i);
-                            horaMinima = equipment.getData().get(i);
+            for (LocalDateTime dia = start; !dia.isAfter(finish); dia = dia.plusDays(1)) {
+                for (int i = 0; i < equipment.getMedida().size(); i++) {
+                    if (dia.format(dateFormatter).equals(equipment.getData().get(i).format(dateFormatter))) {
+                        //Minima noturna fica entre a 00:00h e 05:00h
+                        if (equipment.getData().get(i).getHour() < 5 && equipment.getMedida().get(i) >= 0) {
+                            if (equipment.getMedida().get(i) < minimaN) {
+                                minimaN = equipment.getMedida().get(i);
+                                horaMinima = equipment.getData().get(i);
+                            }
                         }
                     }
                 }
+
+                if (horaMinima == null)
+                    horaMinima = dia;
+
+                if (minimaN == 9999)
+                    results.add(new PrintResult(horaMinima, "fora do horário para mínima noturna"));
+                else
+                    results.add(new PrintResult(horaMinima, df.format(minimaN)));
+
+                //Reseta os valores
+                minimaN = 9999;
+                horaMinima = null;
+
             }
 
-            if (horaMinima == null)
-                horaMinima = dia;
+            DrawPrintResult dp = new DrawPrintResult();
+            dp.setPrintResults(results);
+            dp.setType("MN");
+            dp.setEquipment(equipment.getInstalacao());
+            drawPrintResults.add(dp);
 
-            if (minimaN == 9999)
-                results.add(new PrintResult(horaMinima, "fora do horário para mínima noturna"));
-            else
-                results.add(new PrintResult(horaMinima, df.format(minimaN)));
-
-            //Reseta os valores
-            minimaN = 9999;
-            horaMinima = null;
+        }catch (NullPointerException e){
+            System.out.println("Erro no arquivo "+ equipment.getFileName());
+        }catch (Exception e){
+            e.printStackTrace();
         }
-
-        DrawPrintResult dp = new DrawPrintResult();
-        dp.setPrintResults(results);
-        dp.setType("MN");
-        dp.setEquipment(equipment.getInstalacao());
-        drawPrintResults.add(dp);
     }
 
     private void maximumDaily() {

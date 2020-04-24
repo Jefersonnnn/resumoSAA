@@ -25,19 +25,19 @@ public class AbreExcel implements Runnable {
     private File file;
     private onExcelRead mListener;
     private Equipment equipment;
-    private List<String> optionsAnalysis;
-    private List<DrawPrintResult> drawPrintResultList;
+    private List<DrawPrintResult> drawPrintResults;
+    private List<String> tmpOpt;
 
     public AbreExcel(File file, onExcelRead listener) {
         this.file = file;
         this.mListener = listener;
     }
 
-    public AbreExcel(File file, List<String> optionsAnalysis) {
+    public AbreExcel(File file, List<String> tmp) {
         this.file = file;
-        this.optionsAnalysis = optionsAnalysis;
-        drawPrintResultList = new ArrayList<>();
+        this.tmpOpt = tmp;
     }
+
 
     /**
      * Abre o arquivo especificado em uma Thread
@@ -46,6 +46,13 @@ public class AbreExcel implements Runnable {
      */
     @Override
     public void run() {
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         List<LocalDateTime> datas = new ArrayList<>();
         List<Double> medidas = new ArrayList<>();
         Equipment equipment = new Equipment();
@@ -56,14 +63,13 @@ public class AbreExcel implements Runnable {
 
             if (file.getName().endsWith(".xls")) {
                 System.out.println("Suporte aos arquivos .xls (Excel 2003 ou anterior) foram descontinuados");
-//                HSSFWorkbook workbook = new HSSFWorkbook(arquivo);
-//                HSSFSheet sheetEquipamento = workbook.getSheetAt(0);
             } else {
-
                 Workbook wb = new XSSFWorkbook(arquivo);
                 Sheet sheet = wb.getSheetAt(0);
+                arquivo.close();
+                wb.close();
 
-                System.out.println("Analisando..." + file.getName() + "...");
+                System.out.println("Lendo o arquivo " + file.getName());
                 Iterator<Row> rowIterator = sheet.iterator();
                 while (rowIterator.hasNext()) {
 
@@ -110,7 +116,6 @@ public class AbreExcel implements Runnable {
                 equipment.setData(datas);
                 equipment.setMedida(medidas);
 
-                arquivo.close();
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -119,14 +124,16 @@ public class AbreExcel implements Runnable {
             e.printStackTrace();
         } finally {
             this.equipment = equipment;
+            Analyze analyze = new Analyze();
+            drawPrintResults = analyze.Analyze(equipment,tmpOpt);
             //Objects.requireNonNull(mListener).onFinish(equipment);
-
-            //Realiza a análise dos dados
-            Analyze analises = new Analyze();
-            drawPrintResultList = analises.Analyze(this.equipment, optionsAnalysis);
-
-            System.out.println("Finalizado: " + file.getName() + " :)");
+            System.out.println("Finalizado a leitura do arquivo " + file.getName() + "["+equipment.getInstalacao()+"]");
+            //mListener.onFinish(equipment);
         }
+    }
+
+    public List<DrawPrintResult> returnDrawPrintResults() {
+        return this.drawPrintResults;
     }
 
     public interface onExcelRead {
@@ -135,10 +142,6 @@ public class AbreExcel implements Runnable {
 
     public Equipment returnEquipament(){
         return equipment;
-    }
-
-    public List<DrawPrintResult> returnDrawPrintResults(){
-        return drawPrintResultList;
     }
 
     @Override
