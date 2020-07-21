@@ -1,4 +1,4 @@
-package utils;
+package core;
 
 import analysis.Analyze;
 import model.DrawPrintResult;
@@ -15,25 +15,19 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 //Excel 2007+
 
-public class AbreExcel implements Runnable {
+public class OpenExcel implements Callable<List<DrawPrintResult>> {
 
     private File file;
-    private onExcelRead mListener;
     private Equipment equipment;
     private List<DrawPrintResult> drawPrintResults;
     private List<String> tmpOpt;
 
-    public AbreExcel(File file, onExcelRead listener) {
-        this.file = file;
-        this.mListener = listener;
-    }
-
-    public AbreExcel(File file, List<String> tmp) {
+    public OpenExcel(File file, List<String> tmp) {
         this.file = file;
         this.tmpOpt = tmp;
     }
@@ -45,14 +39,7 @@ public class AbreExcel implements Runnable {
      * @return Equipment
      */
     @Override
-    public void run() {
-
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
+    public List<DrawPrintResult> call() throws Exception {
         List<LocalDateTime> datas = new ArrayList<>();
         List<Double> medidas = new ArrayList<>();
         Equipment equipment = new Equipment();
@@ -70,10 +57,8 @@ public class AbreExcel implements Runnable {
                 wb.close();
 
                 System.out.println("Lendo o arquivo " + file.getName());
-                Iterator<Row> rowIterator = sheet.iterator();
-                while (rowIterator.hasNext()) {
+                for (Row row : sheet) {
 
-                    Row row = rowIterator.next();
                     //Pega as 4 primeiras linhas do arquivo excel
                     //0 Descartado
                     //1 Instalação
@@ -115,33 +100,23 @@ public class AbreExcel implements Runnable {
 
                 equipment.setData(datas);
                 equipment.setMedida(medidas);
-
             }
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
             System.out.println("Arquivo Excel não encontrado: " + file.getAbsolutePath());
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            this.equipment = equipment;
-            Analyze analyze = new Analyze();
-            drawPrintResults = analyze.Analyze(equipment,tmpOpt);
-            //Objects.requireNonNull(mListener).onFinish(equipment);
-            System.out.println("Finalizado a leitura do arquivo " + file.getName() + "["+equipment.getInstalacao()+"]");
-            //mListener.onFinish(equipment);
+        } catch (OutOfMemoryError e){
+            System.out.println("Memória insuficiente!");
+        } catch (Exception e) {
+            System.out.println("Erro na listado!");
+            e.printStackTrace();
         }
-    }
 
-    public List<DrawPrintResult> returnDrawPrintResults() {
-        return this.drawPrintResults;
-    }
+        this.equipment = equipment;
+        Analyze analyze = new Analyze();
+        System.out.println("Finalizado a leitura do arquivo " + file.getName() + "["+equipment.getInstalacao()+"]");
 
-    public interface onExcelRead {
-        void onFinish(Equipment equipment);
-    }
-
-    public Equipment returnEquipament(){
-        return equipment;
+        return analyze.Analyze(equipment,tmpOpt);
     }
 
     @Override
