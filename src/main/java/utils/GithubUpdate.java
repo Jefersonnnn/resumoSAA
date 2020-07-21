@@ -31,7 +31,8 @@ public class GithubUpdate {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             LocalDateTime publishedAt = LocalDateTime.parse(repos.published_at.replace("Z", "").replace("T", " "), formatter);
 
-            return dataRelease.isBefore(publishedAt);
+            if(dataRelease.isBefore(publishedAt))
+                System.out.println(ConsoleUtils.ANSI_PURPLE + "NOVA ATUALIZAÇÃO EM: github.com/Jefersonnnn/resumoSAA/releases" + ConsoleUtils.ANSI_RESET);
         }
         return false;
     }
