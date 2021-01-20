@@ -17,7 +17,7 @@ public class Core {
     public Core(boolean low_config) {
         _lowConfig = low_config;
 
-        //Diretorio contendo os arquivos .xls para serem analisados
+        //Diretorio contendo os arquivos .xls a serem analisados
         pasta = new File("DataEntry");
     }
 
@@ -42,7 +42,7 @@ public class Core {
                 optionsAnalysis.clear();
                 System.out.println("Formato de Impressão [V][H]:");
                 optionsAnalysis.add(0, scanner.next());
-            } while (!optionsAnalysis.get(0).toUpperCase().equals("V") && !optionsAnalysis.get(0).toUpperCase().equals("H"));
+            } while (!optionsAnalysis.get(0).toUpperCase().equals("V") && !optionsAnalysis.get(0).equalsIgnoreCase("H"));
 
 
             System.out.println("Digite as opções para análise:\n-> [MN]   Mínima Noturna\n" +
@@ -105,7 +105,7 @@ public class Core {
 
             //Salvar o resultado em um arquivo .html
             if (printResults.size() > 0)
-                if (optionsAnalysis.get(0).toUpperCase().equals("H"))
+                if (optionsAnalysis.get(0).equalsIgnoreCase("H"))
                     DrawTable.drawTableH(printResults);
                 else
                     DrawTable.drawTableV(printResults);
