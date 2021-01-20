@@ -17,7 +17,7 @@ class Repos {
 
 public class GithubUpdate {
 
-    private static LocalDateTime dataRelease = LocalDateTime.of(2020, Month.APRIL, 22, 20,20 );
+    private static LocalDateTime dataRelease = LocalDateTime.of(2021, Month.JANUARY, 21, 0,0 );
 
     public static boolean newUpdate() throws Exception {
 
