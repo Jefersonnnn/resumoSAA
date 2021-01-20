@@ -7,6 +7,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import utils.Utils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -66,10 +67,10 @@ public class OpenExcel implements Callable<List<DrawPrintResult>> {
                     //3 Periodo da instalação
                     switch (row.getRowNum()) {
                         case 1:
-                            equipment.setInstalacao(row.getCell(1).getStringCellValue());
+                            equipment.setInstalacao(Utils.removeSpecialCharacters(row.getCell(1).getStringCellValue()).trim());
                             break;
                         case 2:
-                            equipment.setDipositivo(row.getCell(1).getStringCellValue());
+                            equipment.setDipositivo(Utils.removeSpecialCharacters(row.getCell(1).getStringCellValue()).trim());
                             break;
                         case 3:
                             equipment.setPeriodo(row.getCell(1).getStringCellValue());
@@ -108,7 +109,7 @@ public class OpenExcel implements Callable<List<DrawPrintResult>> {
         } catch (OutOfMemoryError e){
             System.out.println("Memória insuficiente!");
         } catch (Exception e) {
-            System.out.println("Erro na listado!");
+            System.out.println("Erro não listado!");
             e.printStackTrace();
         }
 
